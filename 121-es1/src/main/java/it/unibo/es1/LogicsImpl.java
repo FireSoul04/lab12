@@ -1,46 +1,59 @@
 package it.unibo.es1;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LogicsImpl implements Logics {
 
-	public LogicsImpl(int size) {
-		//TODO Auto-generated constructor stub
+	private final List<Integer> values;
+
+	public LogicsImpl(final int size) {
+		if (size <= 0) {
+			throw new IllegalArgumentException("List cannot have a size negative or zero");
+		}
+		this.values = new ArrayList<>(size);
+		for (int i = 0; i < size; i++) {
+			this.values.add(0);
+		}
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'size'");
+		return this.values.size();
 	}
 
 	@Override
 	public List<Integer> values() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'values'");
+		return List.copyOf(this.values);
 	}
 
 	@Override
 	public List<Boolean> enablings() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'enablings'");
+		return this.values.stream()
+			.map(t -> t < this.values.size())
+			.toList();
 	}
 
 	@Override
-	public int hit(int elem) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'hit'");
+	public int hit(final int elem) {
+		final int buttonVal = this.values.get(elem) + 1;
+		this.values.set(elem, buttonVal);
+		return buttonVal;
 	}
 
 	@Override
 	public String result() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'result'");
+		return this.values.stream()
+			.map(t -> Integer.toString(t))
+			.collect(Collectors.joining("|", "<<", ">>"));
 	}
 
 	@Override
 	public boolean toQuit() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'toQuit'");
+		return this.values.stream()
+				.allMatch(t -> t > 0) &&
+			this.values.stream()
+				.allMatch(t -> t == this.values.get(0));
 	}
 }
