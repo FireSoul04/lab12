@@ -52,8 +52,6 @@ public class LogicsImpl implements Logics {
 	@Override
 	public boolean toQuit() {
 		return this.values.stream()
-				.allMatch(t -> t > 0) &&
-			this.values.stream()
-				.allMatch(t -> t == this.values.get(0));
+			.allMatch(t -> t == this.values.get(0));
 	}
 }
